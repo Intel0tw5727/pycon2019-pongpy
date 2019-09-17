@@ -27,8 +27,8 @@ class ChallengerTeam(Team):
         '''
         後衛のオレンジ色のバーをコントロールします。
         '''
-        min_distance = 8
-        max_distance = 16
+        min_distance = -24
+        max_distance = 24
 
         wall_min = 16
         wall_max = 112
@@ -36,19 +36,22 @@ class ChallengerTeam(Team):
         direction = (state.ball_pos.y - state.mine_team.atk_pos.y) > 0
         is_over_distance = min_distance < abs(state.mine_team.atk_pos.y - state.mine_team.def_pos.y) < max_distance
 
-        print('is_over_distance: {}'.format(is_over_distance))
-        if direction:
-            if state.ball_pos.y + direction > wall_max:
-                return -info.def_return_limit
-            if is_over_distance:
-                return info.def_return_limit
-            else:
-                return -info.def_return_limit
-        else:
-            if state.ball_pos.y + direction > wall_max:
-                return info.def_return_limit
-            if is_over_distance:
-                return -info.def_return_limit
-            else:
-                return info.def_return_limit
+        if state.ball_pos.x < state.mine_team.atk_pos.x:
+            direction = (state.ball_pos.y - state.mine_team.atk_pos.y) > 0
+            return info.def_return_limit if direction else -info.def_return_limit
 
+        else:
+            if direction:
+                if state.ball_pos.y + direction > wall_max:
+                    return -info.def_return_limit
+                if is_over_distance:
+                    return info.def_return_limit
+                else:
+                    return -info.def_return_limit
+            else:
+                if state.ball_pos.y + direction < wall_min:
+                    return info.def_return_limit
+                if is_over_distance:
+                    return -info.def_return_limit
+                else:
+                    return info.def_return_limit
