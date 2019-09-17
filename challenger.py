@@ -1,7 +1,5 @@
 import os
 
-import numpy as np
-
 from pongpy.interfaces.team import Team
 from pongpy.models.game_info import GameInfo
 from pongpy.models.state import State
